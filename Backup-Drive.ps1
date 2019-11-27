@@ -1,15 +1,15 @@
 [CmdletBinding()]
 param (
-    [Parameter()]
-    $backupname = "test",
-    $camerapath = "H"
+    [Parameter(Position=0,mandatory=$true)][string]$backupname = "camera-backup",
+    [Parameter(Position=1,mandatory=$true)][string]$cameradrive = "H"
 )
-$camerapathprocessed = -join($camerapath, ":\DCIM")
+$camerapathprocessed = -join($cameradrive, ":\DCIM")
+
 <#
 .Description
 Backup-Drive copies all files off of a camera and into target folder
 .Example
-Backup-Drive -backupname "my_photo_backup" -
+Backup-Drive -backupname "my_photo_backup" -cameradrive "D"
 #>
 
 <# Create a directory for the photos to go into #>
@@ -18,6 +18,12 @@ New-Item -ItemType directory -Path $backupname
 Write-Verbose "Directory created"
 
 <# Recursively copy the files off the camera and into specified folder #>
+
 Write-Verbose "Starting file copy..."
-Copy-Item -Recurse -Destination $backupname -Path $camerapathprocessed | Out-Null
-Write-Verbose "File copy compleate"
+try {
+    Copy-Item -Recurse -Destination $backupname -Path $camerapathprocessed | Out-Null
+    Write-Verbose "File copy finished sucessfully"
+}
+catch {
+    Write-Error -Message "File copy failed. Ensure that the camerapath is ONLY the drive letter. Also note that Backup-Drive won't overwrite files, instead throwing an error"
+}

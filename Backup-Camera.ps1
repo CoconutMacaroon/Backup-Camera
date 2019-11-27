@@ -9,7 +9,7 @@ $camerapathprocessed = -join($cameradrive, ":\DCIM")
 .Description
 Backup-Drive copies all files off of a camera and into target folder
 .Example
-Backup-Drive -backupname "my_photo_backup" -cameradrive "D"
+Backup-Camera -backupname "my_photo_backup" -cameradrive "D"
 #>
 
 <# Create a directory for the photos to go into #>
